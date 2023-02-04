@@ -264,6 +264,7 @@ vm_set_max_trace(VALUE self, VALUE val)
     return Qnil;
 }
 
+#ifdef HAVE_LIBJSONNET_FMT_H
 static VALUE
 vm_set_fmt_indent(VALUE self, VALUE val)
 {
@@ -385,6 +386,7 @@ vm_fmt_snippet(VALUE self, VALUE snippet, VALUE fname)
     }
     return str_new_json(vm->vm, result, enc);
 }
+#endif
 
 void
 rubyjsonnet_init_vm(VALUE mJsonnet)
@@ -393,8 +395,10 @@ rubyjsonnet_init_vm(VALUE mJsonnet)
     rb_define_singleton_method(cVM, "new", vm_s_new, -1);
     rb_define_private_method(cVM, "eval_file", vm_evaluate_file, 3);
     rb_define_private_method(cVM, "eval_snippet", vm_evaluate, 3);
+#ifdef HAVE_LIBJSONNET_FMT_H
     rb_define_private_method(cVM, "fmt_file", vm_fmt_file, 2);
     rb_define_private_method(cVM, "fmt_snippet", vm_fmt_snippet, 2);
+#endif
     rb_define_method(cVM, "ext_var", vm_ext_var, 2);
     rb_define_method(cVM, "ext_code", vm_ext_code, 2);
     rb_define_method(cVM, "tla_var", vm_tla_var, 2);
@@ -405,6 +409,7 @@ rubyjsonnet_init_vm(VALUE mJsonnet)
     rb_define_method(cVM, "gc_growth_trigger=", vm_set_gc_growth_trigger, 1);
     rb_define_method(cVM, "string_output=", vm_set_string_output, 1);
     rb_define_method(cVM, "max_trace=", vm_set_max_trace, 1);
+#ifdef HAVE_LIBJSONNET_FMT_H
     rb_define_method(cVM, "fmt_indent=", vm_set_fmt_indent, 1);
     rb_define_method(cVM, "fmt_max_blank_lines=", vm_set_fmt_max_blank_lines, 1);
     rb_define_method(cVM, "fmt_string=", vm_set_fmt_string, 1);
@@ -413,6 +418,7 @@ rubyjsonnet_init_vm(VALUE mJsonnet)
     rb_define_method(cVM, "fmt_pad_objects=", vm_set_fmt_pad_objects, 1);
     rb_define_method(cVM, "fmt_pretty_field_names=", vm_set_fmt_pretty_field_names, 1);
     rb_define_method(cVM, "fmt_sort_imports=", vm_set_fmt_sort_imports, 1);
+#endif
 
     rb_define_const(mJsonnet, "STRING_STYLE_DOUBLE", rb_str_new_cstr("d"));
     rb_define_const(mJsonnet, "STRING_STYLE_SINGLE", rb_str_new_cstr("s"));
